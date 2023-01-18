@@ -119,6 +119,7 @@ std::pair<supertree_data, occurrence_data> parse_data_modified(const std::string
 }
 
 TerraceWrapper::TerraceWrapper(const std::string &nwk_filename, const std::string &matrix_filename)
+    : _bm(2, 2)
 {
   auto nwk_string = read_file(nwk_filename);
   auto matrix_stream = open_ifstream(matrix_filename);
