@@ -3081,6 +3081,7 @@ int clean_exit(int retval)
 void build_terrace(const std::string &nwk_filename, const std::string &matrix_filename)
 {
   TerraceWrapper terraceWrapper(nwk_filename, matrix_filename);
+  std::cout << "No of Trees on the Terrace : "<< terraceWrapper.terrace_size() << std::endl;
   terraceWrapper.print_terrace_newick(std::cout);
   // std::cout << "in build terrace \n " ;
 }
