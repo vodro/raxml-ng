@@ -2,12 +2,12 @@ import os
 from .utils.file import join_dir
 
 # taxa removal from each gene tree
-REMOVED_TAXA_RANGE = ['3-4']
+REMOVED_TAXA_RANGE = ['9-10']
 RANGE_SEPARATOR = '-'
 
 # === constants
-NUM_TREES = 200
-NUM_TAXA = 37
+NUM_TREES = 100
+NUM_TAXA = 15
 NUM_ORIENTATION = 3
 
 # input output folders

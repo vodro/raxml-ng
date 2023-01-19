@@ -13,12 +13,23 @@ from dendropy import TreeList
 
 from codes.utils.file import create_file_abs
 
+def get_deleted_taxa_without_removing_one(gt, count, preserved_taxon):
+    taxa_list = get_taxa_list_from_gt(gt)
+    assert len(taxa_list) >= count, "can't delete " + count + " taxa from " + len(taxa_list)
+    indexes = random.sample(range(0, len(taxa_list)), count)
+
+    ret = []
+
+    for i in indexes:
+        if taxa_list[i] != preserved_taxon:
+            ret.append(taxa_list[i])
+    return ret
 
 def get_deleted_taxa(gt, count):
     taxa_list = get_taxa_list_from_gt(gt)
     assert len(taxa_list) >= count, "can't delete " + count + " taxa from " + len(taxa_list)
     indexes = random.sample(range(0, len(taxa_list)), count)
-    warnings.warn("how on earth this is conserving one taxa ??? --> need discussion ")
+    # warnings.warn("how on earth this is conserving one taxa ??? --> need discussion ")
 
     ret = []
 
@@ -63,6 +74,12 @@ def remove_taxa_from_gts(range, in_file, out_file):
     ###
     trees = dendropy.TreeList.get_from_path(src=in_file, schema='newick', rooting='force-rooted',
                                             preserve_underscores=True)
+    
+    # find preserved taxa
+    gt = trees[0].__str__()
+    taxa_list = get_taxa_list_from_gt(gt)
+    preserved_taxa_idx = random.randint(0, len(taxa_list) - 1)
+    preserved_taxa = taxa_list[preserved_taxa_idx]
 
     create_file_abs(out_file)
     with open(out_file, 'w') as f:
@@ -75,7 +92,8 @@ def remove_taxa_from_gts(range, in_file, out_file):
 
             gt = tree.__str__()
 
-            taxon_set = get_deleted_taxa(gt, num_deletion)
+            # taxon_set = get_deleted_taxa(gt, num_deletion)
+            taxon_set = get_deleted_taxa_without_removing_one(gt, num_deletion, preserved_taxa)
 
             ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)        
             pruned_tree.prune_taxa_with_labels(taxon_set)
