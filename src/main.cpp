@@ -3106,8 +3106,7 @@ int internal_main(int argc, char **argv, void *comm)
   }
   catch (OptionException &e)
   {
-    std::cout << "\n\n\t\tamader jekhane shuru  \n\n"
-              << std::endl;
+    // std::cout << "\n\n\t\tamader jekhane shuru  \n\n"<< std::endl;
     // LOG_INFO << "ERROR: " << e.message() << std::endl;
     
 
