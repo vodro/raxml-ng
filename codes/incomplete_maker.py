@@ -92,8 +92,8 @@ def remove_taxa_from_gts(range, in_file, out_file):
 
             gt = tree.__str__()
 
-            # taxon_set = get_deleted_taxa(gt, num_deletion)
-            taxon_set = get_deleted_taxa_without_removing_one(gt, num_deletion, preserved_taxa)
+            taxon_set = get_deleted_taxa(gt, num_deletion)
+            # taxon_set = get_deleted_taxa_without_removing_one(gt, num_deletion, preserved_taxa)
 
             ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)        
             pruned_tree.prune_taxa_with_labels(taxon_set)
