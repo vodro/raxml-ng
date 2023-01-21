@@ -13,7 +13,7 @@ from codes.incomplete_maker import remove_taxa_from_gts
 
 from codes.parameters import ASTRAL, NUMPY_EXTENSION, QUARTETS, SCRIPT_FOLDER, STATS_FOLDER, TRUE_FOLDER, WQFM, \
     COMPLETE, GENE_TREE, QUARTETS, INCOMPLETE, IMPUTED_LIST, OUTPUT_FOLDER, NUMPY_ARRAY, REMOVED_TAXA_RANGE, INPUT_FOLDER, \
-    QUARTETS_EXTENSION, MODES_LIST, WORKING_FOLDER
+    QUARTETS_EXTENSION, MODES_LIST, WORKING_FOLDER, METHODS
 
 from codes.utils.file import create_file_abs, create_parent_dir, dir_exists_abs, file_exists_absolute, join_dir
 from codes.estimator.wQFM import run_wQFM
@@ -152,24 +152,21 @@ def split_token_and_send_Qscore(stderr):
 
 
 def calculate_Quartet_Score():
-    true_tree = join_dir(TRUE_FOLDER, 'true-species.out.tree')
-    out_dir = STATS_FOLDER
+    # true_tree = join_dir(TRUE_FOLDER, 'true-species.out.tree')
+    # out_dir = STATS_FOLDER
 
     csv_out_list = []
 
     gene_trees_dir = INPUT_FOLDER
-    species_trees_dir = join_dir(OUTPUT_FOLDER, COMPLETE, ASTRAL)
+    # species_trees_dir = join_dir(OUTPUT_FOLDER, COMPLETE, ASTRAL)
 
     try:
         # print(in_dir, OUTPUT_FOLDER)
-        for mode in ['predicted']:
-            for est in (WQFM, ASTRAL):
-                if est == ASTRAL and mode in IMPUTED_LIST:
-                    continue
+        for mode in MODES_LIST:
+            for est in METHODS:
                 RR = [''] if mode == COMPLETE else REMOVED_TAXA_RANGE
                 for range in RR:
-                    species_trees_dir = join_dir(
-                        OUTPUT_FOLDER, mode, range, est)
+                    species_trees_dir = join_dir(OUTPUT_FOLDER, mode, range, est)
                     # print(range, in_dir)
                     for file_ in os.listdir(species_trees_dir):
                         if (file_.endswith('.tre' if est == WQFM else '.out.tre')):
@@ -184,6 +181,7 @@ def calculate_Quartet_Score():
                             q_score = split_token_and_send_Qscore(stderr)
                             csv_out_list += [(est, mode, range,
                                               file_, q_score)]
+                                              
 
         for file_ in os.listdir(gene_trees_dir):
             gt_file_abs = join_dir(gene_trees_dir, file_)
@@ -193,6 +191,7 @@ def calculate_Quartet_Score():
                 ['java', '-jar', join_dir(SCRIPT_FOLDER, 'astral.5.6.3.jar'),
                  '-q', st_file_abs, '-i', gt_file_abs],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).communicate()
+            # print(stderr)
             q_score = split_token_and_send_Qscore(stderr)
             csv_out_list += [('TRUE', '', '', file_, q_score)]
     except:
