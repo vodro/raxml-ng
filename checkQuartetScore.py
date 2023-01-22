@@ -40,6 +40,8 @@ def calculate_Quartet_Score_for_Terraces(terrace_file_path, gt_file_abs):
     if file_exists_absolute(terrace_file_path):
         with open(terrace_file_path, "r") as f:
             lines = f.readlines()
+            if len(lines) <= 2:
+                return None
             for i, line in enumerate(lines):
                 if i != 0:
                     tmp_file = open("tmp.txt", "w")
