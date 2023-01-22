@@ -52,7 +52,7 @@ def calculate_Quartet_Score_for_Terraces(terrace_file_path, gt_file_abs):
                     stdout, stderr = subprocess.Popen(['java', '-jar', join_dir(SCRIPT_FOLDER, 'astral.5.6.3.jar'), '-q', st_file_abs, '-i',gt_file_abs], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).communicate()
                     q_score = split_token_and_send_Qscore(stderr)
                     # print(q_score)
-                    csv_out_list += [('Terrace st no: ', i, '', "", q_score)]
+                    csv_out_list += [('Terrace st no: ', i, '', line, q_score)]
         return csv_out_list            
     else:
         print("Terrace File does not exist: ", terrace_file_path)
