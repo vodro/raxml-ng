@@ -13,9 +13,20 @@ from dendropy import TreeList
 
 from codes.utils.file import create_file_abs
 
+from codes.gt_handler import get_taxa_list_AND_gt_list
+
+
+############################# dictionary of removed taxa #############################
+
+taxon_left_count = {}
+
+#######################################################################################
+
+
 def get_deleted_taxa_without_removing_one(gt, count, preserved_taxon):
     taxa_list = get_taxa_list_from_gt(gt)
-    assert len(taxa_list) >= count, "can't delete " + count + " taxa from " + len(taxa_list)
+    assert len(taxa_list) >= count, "can't delete " + \
+        count + " taxa from " + len(taxa_list)
     indexes = random.sample(range(0, len(taxa_list)), count)
 
     ret = []
@@ -25,16 +36,22 @@ def get_deleted_taxa_without_removing_one(gt, count, preserved_taxon):
             ret.append(taxa_list[i])
     return ret
 
+
 def get_deleted_taxa(gt, count):
     taxa_list = get_taxa_list_from_gt(gt)
-    assert len(taxa_list) >= count, "can't delete " + count + " taxa from " + len(taxa_list)
+    assert len(taxa_list) >= count, "can't delete " + \
+        count + " taxa from " + len(taxa_list)
     indexes = random.sample(range(0, len(taxa_list)), count)
     # warnings.warn("how on earth this is conserving one taxa ??? --> need discussion ")
 
     ret = []
-
+    global taxon_left_count
     for i in indexes:
-        ret.append(taxa_list[i])
+        if taxon_left_count[taxa_list[i]] > 1:
+            taxon_left_count[taxa_list[i]] -= 1
+            ret.append(taxa_list[i])
+        else:
+            print("taxon ", taxa_list[i], " is saved from extinction ")
     return ret
 
 
@@ -67,19 +84,25 @@ def remove_taxa_from_gts(range, in_file, out_file):
     in_time = time.time()
 
     ###
-    # the original one 
+    # the original one
     # trees = dendropy.TreeList.get_from_path(treeName, 'newick',as_rooted=True,preserve_underscores=True)
     # as_rooted is critically deprecated
     # rooting is our new best friend
     ###
     trees = dendropy.TreeList.get_from_path(src=in_file, schema='newick', rooting='force-rooted',
                                             preserve_underscores=True)
-    
+
+    global taxon_left_count  # dictionary of taxa left count
+
+    taxa_list, gt_list = get_taxa_list_AND_gt_list(input_file)
+
+    for taxa in taxa_list:
+        dict(taxon_left_count)[taxa] = gt_list.length
     # find preserved taxa
-    gt = trees[0].__str__()
-    taxa_list = get_taxa_list_from_gt(gt)
-    preserved_taxa_idx = random.randint(0, len(taxa_list) - 1)
-    preserved_taxa = taxa_list[preserved_taxa_idx]
+    # gt = trees[0].__str__()
+    # taxa_list = get_taxa_list_from_gt(gt)
+    # preserved_taxa_idx = random.randint(0, len(taxa_list) - 1)
+    # preserved_taxa = taxa_list[preserved_taxa_idx]
 
     create_file_abs(out_file)
     with open(out_file, 'w') as f:
@@ -95,7 +118,7 @@ def remove_taxa_from_gts(range, in_file, out_file):
             taxon_set = get_deleted_taxa(gt, num_deletion)
             # taxon_set = get_deleted_taxa_without_removing_one(gt, num_deletion, preserved_taxa)
 
-            ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)        
+            ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)
             pruned_tree.prune_taxa_with_labels(taxon_set)
 
             s = pruned_tree.__str__()
