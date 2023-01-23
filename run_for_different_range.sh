@@ -1,7 +1,11 @@
 #!/bin/bash
 # DataList="1-2, 3-4, 5-6, 7-8, 9-10, 11-12, 13-14, 15-16, 17-18, 19-20, 21-22, 23-24, 25-26, 27-28, 29-30"
 #DataList="1-2, 3-4, 5-6, 7-8, 9-10, 11-12, 13-14, 15-16, 17-18, 19-20"
-DataList="8-15, 12-14"
+echo "Running Preprocessing......................";
+./run_preProcessor.sh
+
+echo "Finding Terraces for different ranges......";
+DataList="8-15, 12-14, 13-16"
 Field_Separator=$IFS
 
 # set comma as internal field separator for the string list
@@ -14,3 +18,9 @@ do
 done
 
 IFS=$Field_Separator
+
+echo "Calculating RF Score............";
+python checkRF_Score.py
+echo "Calculating Quartet Score........";
+python checkQuartetScore.py
+echo "Done..............................";
