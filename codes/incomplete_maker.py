@@ -93,11 +93,11 @@ def remove_taxa_from_gts(range, in_file, out_file):
                                             preserve_underscores=True)
 
     global taxon_left_count  # dictionary of taxa left count
-
-    taxa_list, gt_list = get_taxa_list_AND_gt_list(input_file)
+    taxon_left_count = {}
+    taxa_list, gt_list = get_taxa_list_AND_gt_list(in_file)
 
     for taxa in taxa_list:
-        dict(taxon_left_count)[taxa] = gt_list.length
+        taxon_left_count[taxa] = len(gt_list)
     # find preserved taxa
     # gt = trees[0].__str__()
     # taxa_list = get_taxa_list_from_gt(gt)
