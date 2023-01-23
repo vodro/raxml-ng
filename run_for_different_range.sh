@@ -21,6 +21,9 @@ IFS=$Field_Separator
 
 echo "Calculating RF Score............";
 python checkRF_Score.py
-echo "Calculating Quartet Score........";
-python checkQuartetScore.py
+# echo "Running Analysis................";
+# jupyter nbconvert --to script analyzer.ipynb
+# python analyzer.py
+# echo "Calculating Quartet Score........";
+# python checkQuartetScore.py
 echo "Done..............................";
