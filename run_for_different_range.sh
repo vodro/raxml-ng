@@ -5,7 +5,7 @@ echo "Running Preprocessing......................";
 ./run_preProcessor.sh
 
 echo "Finding Terraces for different ranges......";
-DataList="8-15, 12-14, 13-16"
+DataList="15-18"
 Field_Separator=$IFS
 
 # set comma as internal field separator for the string list
