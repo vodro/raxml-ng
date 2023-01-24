@@ -19,10 +19,16 @@ def calculate_RF_distance_for_terrace(terrace_file_path, true_tree):
     csv_out_list = []
     with open(terrace_file_path, 'r') as file:
         lines = file.readlines()
-        if len(lines) <=2:
+        number_of_terrace_print_in_file = False
+        if "Terrace" in lines[0]:
+            number_of_terrace_print_in_file = True
+        if number_of_terrace_print_in_file and len(lines) <=2:
             return None
+        elif not number_of_terrace_print_in_file and len(lines) <=1:
+            return None
+
         for i, line in enumerate(lines):
-            if i!=0:
+            if ( number_of_terrace_print_in_file and i!=0 ) or (not number_of_terrace_print_in_file):
                 tmp_file = open("tmp.txt", "w")
                 print(line, file=tmp_file)
                 tmp_file.close()
@@ -59,6 +65,8 @@ def calculate_RF_distance():
                         print(est, mode, range, file_, dist)
                         csv_out_list += [(est, mode, range, file_, dist)]
 
+                        if mode == COMPLETE:
+                            continue
                         terrace_file_name = range + ".txt"
                         terrace_file_path = join_dir(TERRACE_OUTPUT_FOLDER, terrace_file_name)
                         if not file_exists_absolute(terrace_file_path):

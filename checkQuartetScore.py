@@ -40,10 +40,16 @@ def calculate_Quartet_Score_for_Terraces(terrace_file_path, gt_file_abs):
     if file_exists_absolute(terrace_file_path):
         with open(terrace_file_path, "r") as f:
             lines = f.readlines()
-            if len(lines) <= 2:
+            number_of_terrace_print_in_file = False
+            if "Terrace" in lines[0]:
+                number_of_terrace_print_in_file = True
+            if number_of_terrace_print_in_file and len(lines) <=2:
                 return None
+            elif not number_of_terrace_print_in_file and len(lines) <=1:
+                return None
+
             for i, line in enumerate(lines):
-                if i != 0:
+                if ( number_of_terrace_print_in_file and i!=0 ) or (not number_of_terrace_print_in_file):
                     tmp_file = open("tmp.txt", "w")
                     print(line, file=tmp_file)
                     tmp_file.close()
@@ -75,21 +81,26 @@ def calculate_Quartet_Score():
                 RR = [''] if mode == COMPLETE else REMOVED_TAXA_RANGE
                 for range in RR:
                     species_trees_dir = join_dir(OUTPUT_FOLDER, mode, range, est)
-                    # print(range, in_dir)
+                    # print(range, species_trees_dir)
                     for file_ in os.listdir(species_trees_dir):
                         if (file_.endswith('.tre' if est == WQFM else '.out.tre')):
                             st_file_abs = join_dir(species_trees_dir, file_)
                             file_ = file_.replace("_species", "").replace(
                                 ".out", "").replace(".tre.tre", ".tre")
-                            gt_file_abs = join_dir(gene_trees_dir, range, GENE_TREE, file_) # missing gt file
-                            # print(st_file_abs, gt_file_abs)
+                            if mode == COMPLETE:
+                                gt_file_abs = join_dir(complete_gene_trees_dir, file_)
+                            else:        
+                                gt_file_abs = join_dir(gene_trees_dir, range, GENE_TREE, file_) # missing gt file
+                            # print(mode,st_file_abs, gt_file_abs)
                             stdout, stderr = subprocess.Popen(
                                 ['java', '-jar', join_dir(SCRIPT_FOLDER, 'astral.5.6.3.jar'), '-q', st_file_abs, '-i',
                                  gt_file_abs], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).communicate()
                             q_score = split_token_and_send_Qscore(stderr)
                             csv_out_list += [(est, mode, range,
                                               file_, q_score)]
-
+                            
+                            if mode == COMPLETE:
+                                continue
                             terrace_file_name = range + ".txt"
                             terrace_file_path = join_dir(TERRACE_OUTPUT_FOLDER, terrace_file_name)
                             output = calculate_Quartet_Score_for_Terraces(terrace_file_path, gt_file_abs)
