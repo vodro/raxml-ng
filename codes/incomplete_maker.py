@@ -4,7 +4,8 @@ import time
 
 import warnings
 
-from codes.parameters import RANGE_SEPARATOR
+from codes.parameters import RANGE_SEPARATOR, MISSING_BY_CLADE, OUTGROUP_NAME
+
 from codes.utils.gt import get_taxa_list_from_gt
 
 import dendropy
@@ -14,6 +15,9 @@ from dendropy import TreeList
 from codes.utils.file import create_file_abs
 
 from codes.gt_handler import get_taxa_list_AND_gt_list
+
+from ete3 import PhyloTree
+import numpy as np
 
 
 ############################# dictionary of removed taxa #############################
@@ -37,6 +41,20 @@ def get_deleted_taxa_without_removing_one(gt, count, preserved_taxon):
     return ret
 
 
+def save_taxa_from_extinction(taxa_list):
+    global taxon_left_count
+    ret = []
+    for taxon in taxa_list:
+        if taxon_left_count[taxon] > 1:
+            taxon_left_count[taxon] -= 1
+            ret.append(taxon)
+        else:
+            print("taxon ", taxon, " is saved from extinction ")
+            pass
+    print('ret from extinction : ', ret, 'taxa_list : ', taxa_list)
+    return ret
+
+
 def get_deleted_taxa(gt, count):
     taxa_list = get_taxa_list_from_gt(gt)
     assert len(taxa_list) >= count, "can't delete " + \
@@ -44,15 +62,69 @@ def get_deleted_taxa(gt, count):
     indexes = random.sample(range(0, len(taxa_list)), count)
     # warnings.warn("how on earth this is conserving one taxa ??? --> need discussion ")
 
-    ret = []
-    global taxon_left_count
-    for i in indexes:
-        if taxon_left_count[taxa_list[i]] > 1:
-            taxon_left_count[taxa_list[i]] -= 1
-            ret.append(taxa_list[i])
+    return save_taxa_from_extinction([taxa_list[i] for i in indexes])
+
+
+def get_deleted_taxa_by_clade(gt, count):
+    print('we are here')
+    tree = PhyloTree(gt + ';')
+
+    # times we will go for deletion a small portion of taxa
+
+    times_broken = 0
+
+    root_node = tree.get_tree_root()
+    print(count)
+    # print(root_node.get_ascii(show_internal=True))
+    ret_taxa = []
+    iter = True
+    while root_node.is_leaf() == False and count > 0:
+
+        left_node, right_node = root_node.get_children()
+        root_node = left_node
+
+        left_size = len(left_node.get_leaves())
+        right_size = len(right_node.get_leaves())
+        print('root is : : ', root_node.name)
+
+        print('left size is : ', left_size, ' right size is : ',
+              right_size, ' need to delete more : ', count)
+
+        p = np.random.uniform(0, 1)
+
+        shouldGoLeft = p < left_size / (left_size + right_size)
+
+        # print('p is : ', p, ' should go left : ', shouldGoLeft)
+
+        if shouldGoLeft:
+            if left_size > count:
+                print('going left')
+                root_node = left_node
+            else:
+                ret_taxa += [x.name for x in left_node.get_leaves()]
+                count -= left_size
+                times_broken += 1
+                root_node = right_node
         else:
-            print("taxon ", taxa_list[i], " is saved from extinction ")
-    return ret
+            if right_size > count:
+                print('going right')
+                root_node = right_node
+            else:
+                ret_taxa += [x.name for x in right_node.get_leaves()]
+
+                count -= right_size
+                times_broken += 1
+                root_node = left_node
+
+    # print('ret taxa is : ', ret_taxa, len(ret_taxa))
+    return save_taxa_from_extinction(ret_taxa)
+
+    # iter = not root_node.is_leaf()
+
+    # print(gt)
+
+    # print('ekhon chole jacchi kintu jacchi nah!')
+    # exit(-1)
 
 
 def get_bounds(range):
@@ -115,8 +187,16 @@ def remove_taxa_from_gts(range, in_file, out_file):
 
             gt = tree.__str__()
 
-            taxon_set = get_deleted_taxa(gt, num_deletion)
+            # taxon_set = get_deleted_taxa(gt, num_deletion)
+            # print('taxon set :', taxon_set)
             # taxon_set = get_deleted_taxa_without_removing_one(gt, num_deletion, preserved_taxa)
+
+            if MISSING_BY_CLADE:
+                taxon_set = get_deleted_taxa_by_clade(gt, num_deletion)
+            else:
+                taxon_set = get_deleted_taxa(gt, num_deletion)
+
+            print('missing taxon set :', taxon_set)
 
             ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)
             pruned_tree.prune_taxa_with_labels(taxon_set)
