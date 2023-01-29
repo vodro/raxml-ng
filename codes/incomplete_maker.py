@@ -72,23 +72,30 @@ def get_deleted_taxa_by_clade(gt, count):
     # times we will go for deletion a small portion of taxa
 
     times_broken = 0
-
+    #selecting the outgroup randomly
+    # outgroup = random.choice(tree.get_leaves()).name
+    # tree.set_outgroup(outgroup)
     root_node = tree.get_tree_root()
     print(count)
     # print(root_node.get_ascii(show_internal=True))
     ret_taxa = []
     iter = True
     while root_node.is_leaf() == False and count > 0:
-
-        left_node, right_node = root_node.get_children()
-        root_node = left_node
+        try:
+            left_node, right_node = root_node.get_children()
+            root_node = left_node
+        except:
+            # print('root node is : ',root_node.get_children())
+            left_node, right_node = root_node.get_children()[:2]
+            
+            # exit(-1)
 
         left_size = len(left_node.get_leaves())
         right_size = len(right_node.get_leaves())
-        print('root is : : ', root_node.name)
+        # print('root is : : ', root_node.name)
 
-        print('left size is : ', left_size, ' right size is : ',
-              right_size, ' need to delete more : ', count)
+        # print('left size is : ', left_size, ' right size is : ',
+            #   right_size, ' need to delete more : ', count)
 
         p = np.random.uniform(0, 1)
 
@@ -98,7 +105,7 @@ def get_deleted_taxa_by_clade(gt, count):
 
         if shouldGoLeft:
             if left_size > count:
-                print('going left')
+                # print('going left')
                 root_node = left_node
             else:
                 ret_taxa += [x.name for x in left_node.get_leaves()]
@@ -107,7 +114,7 @@ def get_deleted_taxa_by_clade(gt, count):
                 root_node = right_node
         else:
             if right_size > count:
-                print('going right')
+                # print('going right')
                 root_node = right_node
             else:
                 ret_taxa += [x.name for x in right_node.get_leaves()]
@@ -197,6 +204,7 @@ def remove_taxa_from_gts(range, in_file, out_file):
                 taxon_set = get_deleted_taxa(gt, num_deletion)
 
             print('missing taxon set :', taxon_set)
+            print('missing taxon set size :', len(taxon_set))
 
             ###        prTree.prune_taxa_with_labels(taxon_sets, update_splits=True, delete_outdegree_one=True)
             pruned_tree.prune_taxa_with_labels(taxon_set)

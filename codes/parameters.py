@@ -3,11 +3,11 @@ from .utils.file import join_dir
 
 # taxa removal from each gene tree
 # REMOVED_TAXA_RANGE = ['1-2', '3-4', '5-6', '7-8', '9-10', '11-12', '13-14', '15-16', '17-18', '19-20', '21-22', '23-24', '25-26', '27-28', '29-30']
-REMOVED_TAXA_RANGE = ["14-18"]
+REMOVED_TAXA_RANGE = ["16-18"]
 RANGE_SEPARATOR = '-'
 
 # === constants
-NUMBER_OF_REPLICA = 20
+NUMBER_OF_REPLICA = 10
 NUM_TREES = 200
 NUM_TAXA = 37
 NUM_ORIENTATION = 3

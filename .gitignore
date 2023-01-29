@@ -39,3 +39,9 @@ release/
 .cproject
 .project
 .settings/
+
+# intellij project files
+.devcontainer/
+.ipynb_checkpoints/
+.vscode/
+
