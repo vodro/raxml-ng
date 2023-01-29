@@ -5,7 +5,7 @@ echo "Running Preprocessing......................";
 ./run_preProcessor.sh
 
 echo "Finding Terraces for different ranges......";
-DataList="8-15, 12-14, 13-16"
+DataList="15-18"
 Field_Separator=$IFS
 
 # set comma as internal field separator for the string list
@@ -21,6 +21,9 @@ IFS=$Field_Separator
 
 echo "Calculating RF Score............";
 python checkRF_Score.py
-echo "Calculating Quartet Score........";
-python checkQuartetScore.py
+# echo "Running Analysis................";
+# jupyter nbconvert --to script analyzer.ipynb
+# python analyzer.py
+# echo "Calculating Quartet Score........";
+# python checkQuartetScore.py
 echo "Done..............................";

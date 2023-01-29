@@ -3,13 +3,15 @@ from .utils.file import join_dir
 
 # taxa removal from each gene tree
 # REMOVED_TAXA_RANGE = ['1-2', '3-4', '5-6', '7-8', '9-10', '11-12', '13-14', '15-16', '17-18', '19-20', '21-22', '23-24', '25-26', '27-28', '29-30']
-REMOVED_TAXA_RANGE = ['8-15', '12-14', '13-16']
+REMOVED_TAXA_RANGE = ["14-18"]
 RANGE_SEPARATOR = '-'
 
 # === constants
+NUMBER_OF_REPLICA = 20
 NUM_TREES = 200
 NUM_TAXA = 37
 NUM_ORIENTATION = 3
+
 
 # input output folders
 INPUT_FOLDER = 'in'
@@ -40,8 +42,8 @@ PREDICTED_WITH_DISTRIBUTION = 'predicted_with_distribution'
 # IMPUTED_LIST = [IMPUTED, PREDICTED]
 IMPUTED_LIST = []
 
-# MODES_LIST = [COMPLETE, INCOMPLETE]
-MODES_LIST = [INCOMPLETE]
+MODES_LIST = [COMPLETE, INCOMPLETE]
+# MODES_LIST = [INCOMPLETE]
 
 
 # tree extension
@@ -53,7 +55,7 @@ GENE_TREE = 'gt'
 
 ASTRAL = 'astral'
 WQFM = 'wQFM'
-# METHODS = [WQFM, ASTRAL]
+# METHODS = [WQFM]
 METHODS = [ASTRAL]
 
 FOUR_TAXA_MAP = 'map'

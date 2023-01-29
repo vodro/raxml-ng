@@ -15,14 +15,20 @@ from codes.parameters import ASTRAL, NUMPY_EXTENSION, QUARTETS, SCRIPT_FOLDER, S
     COMPLETE, GENE_TREE, QUARTETS, INCOMPLETE, IMPUTED_LIST, OUTPUT_FOLDER, NUMPY_ARRAY, REMOVED_TAXA_RANGE, INPUT_FOLDER, \
     QUARTETS_EXTENSION, MODES_LIST, WORKING_FOLDER, METHODS, TERRACE_OUTPUT_FOLDER
 
-def calculate_RF_distance_for_terrace(terrace_file_path, true_tree):
+def calculate_RF_distance_for_terrace(terrace_file_path, true_tree, range, file_):
     csv_out_list = []
     with open(terrace_file_path, 'r') as file:
         lines = file.readlines()
-        if len(lines) <=2:
+        number_of_terrace_print_in_file = False
+        if "Terrace" in lines[0]:
+            number_of_terrace_print_in_file = True
+        if number_of_terrace_print_in_file and len(lines) <=2:
             return None
+        elif not number_of_terrace_print_in_file and len(lines) <=1:
+            return None
+
         for i, line in enumerate(lines):
-            if i!=0:
+            if ( number_of_terrace_print_in_file and i!=0 ) or (not number_of_terrace_print_in_file):
                 tmp_file = open("tmp.txt", "w")
                 print(line, file=tmp_file)
                 tmp_file.close()
@@ -33,7 +39,7 @@ def calculate_RF_distance_for_terrace(terrace_file_path, true_tree):
                 assert result[0] == result[1] == result[2]
                 dist = str(result[0])
                 # print(est, mode, range, file_, dist)
-                csv_out_list += [("Terrace ST no. ", i, "", line, dist)]
+                csv_out_list += [("Terrace ST no: ", i+1, "", line, dist)]
     return csv_out_list
 
 
@@ -59,12 +65,17 @@ def calculate_RF_distance():
                         print(est, mode, range, file_, dist)
                         csv_out_list += [(est, mode, range, file_, dist)]
 
-                        terrace_file_name = range + ".txt"
+                        if mode == COMPLETE:
+                            continue
+
+                        replicata_name = file_.split(".")[0]
+                        
+                        terrace_file_name = range + "_" + replicata_name + ".txt"
                         terrace_file_path = join_dir(TERRACE_OUTPUT_FOLDER, terrace_file_name)
                         if not file_exists_absolute(terrace_file_path):
                             print("!!!!!!!!!!!!!!!!!! File does not exist: " + terrace_file_path)
                             continue
-                        output = calculate_RF_distance_for_terrace(terrace_file_path, true_tree)
+                        output = calculate_RF_distance_for_terrace(terrace_file_path, true_tree, range, file_)
                         if output is not None:
                             csv_out_list += output
                         
