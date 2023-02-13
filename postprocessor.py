@@ -219,7 +219,6 @@ def run_incomplete_ASTRAL():
     '''
     runs astral in all the incomplete folders
     '''
-
     for range in REMOVED_TAXA_RANGE:
         root_dir = join_dir(OUTPUT_FOLDER, INCOMPLETE, range)
         in_dir = join_dir(root_dir, GENE_TREE)

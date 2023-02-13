@@ -45,3 +45,6 @@ release/
 .ipynb_checkpoints/
 .vscode/
 
+#dataset
+dataset/asteroid_dataset
+
