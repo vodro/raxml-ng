@@ -77,6 +77,46 @@ def calculate_RF_AND_generate_stats_OF_TERRACE(terrace_file_path, true_tree, met
                 # print(est, mode, range, file_, dist)
     return count[0], count[1], count[2]
 
+def calculate_RF_AND_generate_stats_OF_TERRACE_Return_better_trees(terrace_file_path, true_tree, method_RF_score_of_species_tree):
+    count = np.zeros(3) # better, same, worse
+    better_trees = []
+    with open(terrace_file_path, 'r') as file:
+        lines = file.readlines()
+        number_of_terrace_print_in_file = False
+        if "Terrace" in lines[0]:
+            number_of_terrace_print_in_file = True
+        if number_of_terrace_print_in_file and len(lines) <=2:
+            return None
+        elif not number_of_terrace_print_in_file and len(lines) <=1:
+            return None
+
+        for i, line in enumerate(lines):
+            if ( number_of_terrace_print_in_file and i!=0 ) or (not number_of_terrace_print_in_file):
+                tmp_file = open("tmp.txt", "w")
+                print(line, file=tmp_file)
+                tmp_file.close()
+
+                file_abs = join_dir("tmp.txt")
+                
+                # get RF distance
+                result = ast.literal_eval(
+                    subprocess.check_output(['getFpFn.py', '-t', true_tree, '-e', file_abs], encoding='UTF-8'))
+                # print(result[0], result[1], result[2])
+                # print(result)
+                # assert result[0] == result[1] == result[2]
+                dist = float(result[0])
+                method_RF_score_of_species_tree = float(method_RF_score_of_species_tree)
+                
+                if dist < method_RF_score_of_species_tree:
+                    count[0] += 1
+                    better_trees.append(line)
+                elif dist == method_RF_score_of_species_tree:
+                    count[1] += 1
+                else:
+                    count[2] += 1
+                # print(est, mode, range, file_, dist)
+    return count[0], count[1], count[2], better_trees
+
 def calculate_RF_distance_for_a_ST(st_tree, true_tree):
     result = ast.literal_eval(subprocess.check_output(['getFpFn.py', '-t', true_tree, '-e', st_tree], encoding='UTF-8'))
     # print(result[0], result[1], result[2])

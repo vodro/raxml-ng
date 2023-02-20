@@ -1,6 +1,6 @@
 from genericpath import exists
 import os
-
+import shutil
 
 def join_dir(first, *second):
     '''
@@ -66,5 +66,39 @@ def create_file_abs(abs_file_name):
     '''
     file_remove_absolute(abs_file_name)
     create_parent_dir(abs_file_name)
+
+def remove_dir_abs(abs_dir_name):
+    '''
+    removes a directory. 
+    '''
+    if dir_exists_abs(abs_dir_name):
+        shutil.rmtree(abs_dir_name)
+
+def remove_dir_current(cur_dir_name):
+    '''
+    removes a directory. 
+    '''
+    if dir_exists_abs(cur_dir_name):
+        # remove non empty directory
+        shutil.rmtree(cur_dir_name)
+
+def copy_file_abs(from_file, to_file):
+    '''
+    copies a file. 
+    '''
+    shutil.copyfile(from_file, to_file)
+
+def copy_file_current(from_file, to_file):
+    '''
+    copies a file. 
+    '''
+    # relative to current directory
+    shutil.copyfile(join_dir(os.getcwd(), from_file), join_dir(os.getcwd(), to_file))
+
+def create_dir_current(cur_dir_name):
+    '''
+    creates a directory. 
+    '''
+    os.makedirs(cur_dir_name, exist_ok=True)
 
     
