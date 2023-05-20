@@ -56,6 +56,10 @@ GENE_TREE = 'gt'
 
 ASTRAL = 'astral'
 WQFM = 'wQFM'
+TRUE_ST = 'true_st'
+
+
+
 # METHODS = [WQFM]
 METHODS = [ASTRAL]
 
@@ -74,3 +78,23 @@ THRESHOLD_OF_REFUSE_PREDICTION = 0.70
 MISSING_BY_CLADE = True
 OUTGROUP_NAME = 'GAL'
 MAX_TIMES_DELETION_HAPPEN = 3
+
+
+ASTEROID_RAxML_NG = 'asteroid_raxml_ng'
+ASTRID_RAxML_NG = 'astrid_raxml_ng'
+ASTRALMP_RAxML_NG = 'astralmp_raxml_ng'
+ASTRID_FASTME_RAxML_NG = 'astrid_fastme_raxml_ng'
+BIPSTEP_RAxML_NG = 'bipstep_raxml_ng'
+FASTRFS_RAxML_NG_GREEDY = 'fastrfs_raxml_ng_greedy'
+FASTRFS_RAxML_NG_SINGLE = 'fastrfs_raxml_ng_SINGLE'
+# dictionary of mapping from method name to method species tree
+METHOD_TO_ST = {
+    ASTEROID_RAxML_NG: "asteroid-raxml-ng.GTR+G.speciesTree.newick",
+    ASTRID_RAxML_NG: "asteroidastrid-raxml-ng.GTR+G.speciesTree.newick",
+    ASTRALMP_RAxML_NG: "astralmp_raxml-ng.GTR+G.speciesTree.newick",
+    ASTRID_FASTME_RAxML_NG: "astrid-fastme_raxml-ng.GTR+G.speciesTree.newick",
+    BIPSTEP_RAxML_NG: "bipstep_raxml-ng.GTR+G.speciesTree.newick",
+    FASTRFS_RAxML_NG_GREEDY: "fastrfs-raxml-ng_greedy.GTR+G.speciesTree.newick",
+    FASTRFS_RAxML_NG_SINGLE: "fastrfs-raxml-ng_single.GTR+G.speciesTree.newick",
+}
+

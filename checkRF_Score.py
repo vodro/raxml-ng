@@ -78,6 +78,7 @@ def calculate_RF_AND_generate_stats_OF_TERRACE(terrace_file_path, true_tree, met
     return count[0], count[1], count[2]
 
 def calculate_RF_AND_generate_stats_OF_TERRACE_Return_better_trees(terrace_file_path, true_tree, method_RF_score_of_species_tree):
+    csv_out_list = []
     count = np.zeros(3) # better, same, worse
     better_trees = []
     with open(terrace_file_path, 'r') as file:
@@ -106,6 +107,7 @@ def calculate_RF_AND_generate_stats_OF_TERRACE_Return_better_trees(terrace_file_
                 # assert result[0] == result[1] == result[2]
                 dist = float(result[0])
                 method_RF_score_of_species_tree = float(method_RF_score_of_species_tree)
+                csv_out_list.append([line, dist])
                 
                 if dist < method_RF_score_of_species_tree:
                     count[0] += 1
@@ -115,7 +117,7 @@ def calculate_RF_AND_generate_stats_OF_TERRACE_Return_better_trees(terrace_file_
                 else:
                     count[2] += 1
                 # print(est, mode, range, file_, dist)
-    return count[0], count[1], count[2], better_trees
+    return count[0], count[1], count[2], better_trees, csv_out_list
 
 def calculate_RF_distance_for_a_ST(st_tree, true_tree):
     result = ast.literal_eval(subprocess.check_output(['getFpFn.py', '-t', true_tree, '-e', st_tree], encoding='UTF-8'))

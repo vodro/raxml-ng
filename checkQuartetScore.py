@@ -127,6 +127,15 @@ def calculate_Quartet_Score():
         csv.writer(stat_file).writerows(csv_out_list)
         stat_file.close()
 
+def calculate_QuartetScore_for_ST(st_file_abs, gt_file_abs):
+    # print(mode,st_file_abs, gt_file_abs)
+    stdout, stderr = subprocess.Popen(
+         ['java', '-jar', join_dir(SCRIPT_FOLDER, 'astral.5.6.3.jar'), '-q', st_file_abs, '-i', 
+          gt_file_abs], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).communicate()
+    q_score = split_token_and_send_Qscore(stderr)
+
+    return q_score
+
 
 def main():
     calculate_Quartet_Score()
