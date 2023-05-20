@@ -3078,11 +3078,16 @@ int clean_exit(int retval)
 
 #include "terraces/TerraceWrapper.hpp"
 
-void build_terrace(const std::string &nwk_filename, const std::string &matrix_filename)
+void build_terrace(const std::string &nwk_filename, const std::string &matrix_filename,const std::string &print_size_only)
 {
   TerraceWrapper terraceWrapper(nwk_filename, matrix_filename);
   // std::cout << "No of Trees on the Terrace : "<< terraceWrapper.terrace_size() << std::endl;
-  terraceWrapper.print_terrace_newick(std::cout);
+  if (print_size_only == "false"){
+    terraceWrapper.print_terrace_newick(std::cout);
+  }
+  // output size of terrace to file
+  std::ofstream terrace_file("terrace_size.txt");
+  terrace_file << terraceWrapper.terrace_size() << std::endl;
   // std::cout << "in build terrace \n " ;
 }
 
@@ -3109,8 +3114,12 @@ int internal_main(int argc, char **argv, void *comm)
     // std::cout << "\n\n\t\tamader jekhane shuru  \n\n"<< std::endl;
     // LOG_INFO << "ERROR: " << e.message() << std::endl;
     
-
-    build_terrace(argv[1], argv[2]);
+    if (argc == 3){
+      build_terrace(argv[1], argv[2], "false");
+    }
+    else if (argc == 4){
+      build_terrace(argv[1], argv[2], "true");
+    }
     return clean_exit(EXIT_FAILURE);
   }
 
