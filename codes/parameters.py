@@ -87,6 +87,13 @@ ASTRID_FASTME_RAxML_NG = 'astrid_fastme_raxml_ng'
 BIPSTEP_RAxML_NG = 'bipstep_raxml_ng'
 FASTRFS_RAxML_NG_GREEDY = 'fastrfs_raxml_ng_greedy'
 FASTRFS_RAxML_NG_SINGLE = 'fastrfs_raxml_ng_SINGLE'
+FASTRFS_RAxML_NG_SINGLE_life92 = 'fastrfs_SINGLE_life92'
+FASTRFS_GREEDY_life92 = 'fastrfs_greedy_life92'
+ASTRID_life92 = 'astrid_life92'
+ASTEROID_life92 = 'asteroid_life92'
+ASTRID_FASTME_life92 = 'astrid_fastme_life92'
+ASTRAL_TRUE_life92 = 'astral_true_life92'
+ASTRALMP_life92 = 'astralmp_life92'
 # dictionary of mapping from method name to method species tree
 METHOD_TO_ST = {
     ASTEROID_RAxML_NG: "asteroid-raxml-ng.GTR+G.speciesTree.newick",
@@ -96,5 +103,13 @@ METHOD_TO_ST = {
     BIPSTEP_RAxML_NG: "bipstep_raxml-ng.GTR+G.speciesTree.newick",
     FASTRFS_RAxML_NG_GREEDY: "fastrfs-raxml-ng_greedy.GTR+G.speciesTree.newick",
     FASTRFS_RAxML_NG_SINGLE: "fastrfs-raxml-ng_single.GTR+G.speciesTree.newick",
+    FASTRFS_RAxML_NG_SINGLE_life92: "fastrfs-true_single.true.speciesTree.newick",
+    FASTRFS_GREEDY_life92 : "fastrfs-true_greedy.true.speciesTree.newick",
+    ASTRID_life92 : "astrid-fastme_true.true.speciesTree.newick",
+    ASTEROID_life92 : "asteroid-true.true.speciesTree.newick",
+    ASTRID_FASTME_life92 : "astrid-fastme_true.true.speciesTree.newick",
+    ASTRAL_TRUE_life92 : "astral_true.true.speciesTree.newick",
+    ASTRALMP_life92:'astralmp_true-additional.true.speciesTree.newick',
+
 }
 

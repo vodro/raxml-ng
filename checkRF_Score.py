@@ -92,6 +92,8 @@ def calculate_RF_AND_generate_stats_OF_TERRACE_Return_better_trees(terrace_file_
             return None
 
         for i, line in enumerate(lines):
+            if i % 100 == 0:
+                print(i, " trees processed")
             if ( number_of_terrace_print_in_file and i!=0 ) or (not number_of_terrace_print_in_file):
                 tmp_file = open("tmp.txt", "w")
                 print(line, file=tmp_file)

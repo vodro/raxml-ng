@@ -232,7 +232,7 @@ def run_incomplete_ASTRAL():
 def main():
     # astral
     run_ASTRAL(INPUT_FOLDER, join_dir(OUTPUT_FOLDER, COMPLETE, 'astral'))
-    run_incomplete_ASTRAL()
+    # run_incomplete_ASTRAL()
     # return
 
     # run_wQFM(INPUT_FOLDER, join_dir(OUTPUT_FOLDER, COMPLETE, 'wQFM'))
